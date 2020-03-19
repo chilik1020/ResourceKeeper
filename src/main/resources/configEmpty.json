@@ -1,0 +1,18 @@
+{
+  "proxyEnable": false,
+  "proxyAddress": "",
+  "proxyPort": 0,
+  "users": [],
+  "bots": [],
+  "shotsInCycle": 0,
+  "cycleSleep": 0,
+  "periodShotMs": 0,
+  "energyCommonMin": 0.0,
+  "energyCommonMax": 0.0,
+
+  "pictureDirectory": "-",
+
+  "tempReadingPeriod": 0,
+  "temperatureLogDefaultPath": "-",
+  "tempChanels": []
+}
