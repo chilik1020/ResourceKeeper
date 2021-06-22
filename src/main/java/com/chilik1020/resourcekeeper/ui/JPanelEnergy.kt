@@ -6,7 +6,9 @@ import com.chilik1020.resourcekeeper.controller.energy.listener.*
 import com.chilik1020.resourcekeeper.utils.ColorUtil
 import com.chilik1020.resourcekeeper.utils.JsonConfig
 import com.chilik1020.resourcekeeper.utils.chartPanelToPng
-import org.jfree.chart.*
+import org.jfree.chart.ChartFactory
+import org.jfree.chart.ChartPanel
+import org.jfree.chart.JFreeChart
 import org.jfree.chart.plot.PlotOrientation
 import org.jfree.chart.plot.XYPlot
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer
@@ -16,13 +18,9 @@ import org.jfree.data.xy.XYSeriesCollection
 import org.jfree.ui.tabbedui.VerticalLayout
 import java.awt.*
 import javax.swing.*
-import javax.swing.border.MatteBorder
-import javax.swing.JLabel
-import javax.swing.JPanel
 
 
-
-class JPanelEnergy: JPanel() {
+class JPanelEnergy : JPanel() {
 
     private val fontSize20 = Font("Serif", Font.BOLD, 20)
     private val fontSize16 = Font("Serif", Font.BOLD, 16)
@@ -60,13 +58,13 @@ class JPanelEnergy: JPanel() {
     private lateinit var panelChartLabMax: JPanel
     private val lblLabMaxChart: JLabel = JLabel("График LabMax")
     private val lblRangeLabMax: JLabel = JLabel("Ось Х: ")
-    internal var rangeXLabMaxChoose: JComboBox<String> = JComboBox(arrayOf("1000","5000","10000","50000","100000","Все"))
+    internal var rangeXLabMaxChoose: JComboBox<String> = JComboBox(arrayOf("1000", "5000", "10000", "50000", "100000", "Все"))
 
     private lateinit var jChartPanelCommon: ChartPanel
     private var lblCommonChart: JLabel = JLabel("График ресурса")
     private var lblRangeDomainCommon: JLabel = JLabel("Ось X:")
     private var lblRangeAxesCommon: JLabel = JLabel("Ось Y(мин,макс):")
-    var rangeXCommonChoose: JComboBox<String> = JComboBox(arrayOf("10000","50000","100000","500000","1000000","Все"))
+    var rangeXCommonChoose: JComboBox<String> = JComboBox(arrayOf("10000", "50000", "100000", "500000", "1000000", "Все"))
     var minYCommonChart: JFormattedTextField = JFormattedTextField()
     var maxYCommonChart: JFormattedTextField = JFormattedTextField()
     private val rangeAxesCommonUpdateBtn: JButton = JButton("Обновить")
@@ -86,9 +84,9 @@ class JPanelEnergy: JPanel() {
     lateinit var plotCommon: XYPlot
 
     private val chartCommonWidth = 430
-    private val chartCommonHeight = 310
+    private val chartCommonHeight = 300
     private val chartLabMaxWidth = 430
-    private val chartLabMaxHeight = 200
+    private val chartLabMaxHeight = 189
 
 
     init {
@@ -99,8 +97,8 @@ class JPanelEnergy: JPanel() {
 
     private fun initComponents() {
         layout = VerticalLayout()
-        border = MatteBorder(3, 1, 1, 1, Color.GRAY)
-
+        //   background = Color.LIGHT_GRAY
+        border = BorderFactory.createMatteBorder(1, 1, 1, 1, ColorUtil.panelBorderColor)
         val panelNorth = JPanel()
         val panelCenter = JPanel()
         val panelSouth = JPanel()
@@ -109,15 +107,17 @@ class JPanelEnergy: JPanel() {
            PANEL NORTH
          *************************************************************************************************************/
 
-        panelNorth.layout = GridBagLayout()
+        panelNorth.apply {
+            layout = GridBagLayout()
+            alignmentX = Component.LEFT_ALIGNMENT
+            //      background = Color.LIGHT_GRAY
+        }
 
-        panelNorth.alignmentX = Component.LEFT_ALIGNMENT
-
-        (panelNorth.layout as GridBagLayout).columnWidths = intArrayOf(5,50, 100, 50, 50, 100, 50, 5)
+        (panelNorth.layout as GridBagLayout).columnWidths = intArrayOf(5, 50, 100, 50, 50, 100, 50, 5)
 
         //---- Имя панели "Энергия" ----
-        labelName.font = fontSize16
-        labelName.preferredSize = Dimension(550,20)
+        //      labelName.font = fontSize16
+        labelName.preferredSize = Dimension(550, 20)
         panelNorth.add(labelName, GridBagConstraints(1, 0, 8, 1, 0.0, 0.0,
                 GridBagConstraints.WEST, GridBagConstraints.BOTH,
                 Insets(5, 5, 5, 5), 0, 0))
@@ -128,7 +128,7 @@ class JPanelEnergy: JPanel() {
                 Insets(5, 5, 5, 5), 0, 0))
 
         //---- energyFilePath ----
-        commonFilePath.preferredSize = Dimension(100,20)
+        commonFilePath.preferredSize = Dimension(100, 20)
         commonFilePath.scrollOffset = 100
         panelNorth.add(commonFilePath, GridBagConstraints(2, 1, 1, 1, 0.0, 0.0,
                 GridBagConstraints.WEST, GridBagConstraints.BOTH,
@@ -147,7 +147,7 @@ class JPanelEnergy: JPanel() {
                 Insets(5, 5, 5, 5), 0, 0))
 
         //---- energyFilePath ----
-        energyFilePath.preferredSize = Dimension(100,20)
+        energyFilePath.preferredSize = Dimension(100, 20)
         energyFilePath.scrollOffset = 100
         panelNorth.add(energyFilePath, GridBagConstraints(5, 1, 1, 1, 0.0, 0.0,
                 GridBagConstraints.WEST, GridBagConstraints.BOTH,
@@ -179,23 +179,27 @@ class JPanelEnergy: JPanel() {
         /*
             PANEL CENTER
          *************************************************************************************************************/
-        panelCenter.layout = VerticalLayout()
+        panelCenter.apply {
+            layout = VerticalLayout()
+            //      background = Color.LIGHT_GRAY
+        }
+
 
         val panelLabMaxChartSet = JPanel()
         panelLabMaxChartSet.layout = GridBagLayout()
         panelLabMaxChartSet.alignmentX = Component.LEFT_ALIGNMENT
-        (panelLabMaxChartSet.layout as GridBagLayout).columnWidths = intArrayOf(5,80, 80, 80, 80,200, 5)
+        (panelLabMaxChartSet.layout as GridBagLayout).columnWidths = intArrayOf(5, 80, 80, 80, 80, 200, 5)
 
-        lblLabMaxChart.font = fontSize14
-        panelLabMaxChartSet.add(lblLabMaxChart,GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
+        //      lblLabMaxChart.font = fontSize14
+        panelLabMaxChartSet.add(lblLabMaxChart, GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.WEST, GridBagConstraints.BOTH,
                 Insets(5, 5, 5, 5), 0, 0))
 
-        panelLabMaxChartSet.add(lblRangeLabMax,GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
+        panelLabMaxChartSet.add(lblRangeLabMax, GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.EAST, GridBagConstraints.BOTH,
                 Insets(5, 5, 5, 5), 0, 0))
 
-        panelLabMaxChartSet.add(rangeXLabMaxChoose,GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
+        panelLabMaxChartSet.add(rangeXLabMaxChoose, GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.EAST, GridBagConstraints.BOTH,
                 Insets(5, 5, 5, 5), 0, 0))
 
@@ -210,54 +214,57 @@ class JPanelEnergy: JPanel() {
         jChartPanel.preferredSize = Dimension(chartLabMaxWidth, chartLabMaxHeight)
         jChartPanel.minimumSize = Dimension(chartLabMaxWidth, chartLabMaxHeight)
         jChartPanel.border = BorderFactory.createEmptyBorder(1, 1, 1, 1)
-        jChartPanel.background = Color.GRAY
+        // jChartPanel.background = Color.GRAY
 
         val panelLabMaxDetails = JPanel()
         panelLabMaxDetails.layout = GridBagLayout()
         panelLabMaxDetails.alignmentX = Component.LEFT_ALIGNMENT
-        (panelLabMaxDetails.layout as GridBagLayout).columnWidths = intArrayOf(5,90, 90, 90, 90, 90,90, 5)
+        (panelLabMaxDetails.layout as GridBagLayout).columnWidths = intArrayOf(5, 90, 90, 90, 90, 90, 90, 5)
 
         //---- Счётчик выстрелорв ----
         lblNumberOfShot.text = "Выстрел"
         lblNumberOfShot.font = fontSize14
-        panelLabMaxDetails.add(lblNumberOfShot,GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
+        panelLabMaxDetails.add(lblNumberOfShot, GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.VERTICAL,
                 Insets(5, 5, 5, 5), 0, 0))
 
         shotCurrent.font = fontSize20
         shotCurrent.text = "0"
+        shotCurrent.foreground = ColorUtil.labMaxDetailsShotColor
         shotCurrent.isOpaque = true
-        shotCurrent.background = ColorUtil.labMaxDetailsShotColor
-        panelLabMaxDetails.add(shotCurrent,GridBagConstraints(1, 1, 1, 2, 0.0, 0.0,
+     //   shotCurrent.background = ColorUtil.labMaxDetailsShotColor
+        panelLabMaxDetails.add(shotCurrent, GridBagConstraints(1, 1, 1, 2, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.VERTICAL,
                 Insets(5, 5, 5, 5), 0, 0))
 
         //---- Ресурс ----
         lblResource.text = "Ресурс"
         lblResource.font = fontSize14
-        panelLabMaxDetails.add(lblResource,GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
+        panelLabMaxDetails.add(lblResource, GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.VERTICAL,
                 Insets(5, 5, 5, 5), 0, 0))
 
         resourceValue.font = fontSize20
         resourceValue.text = "0"
+        resourceValue.foreground = ColorUtil.labMaxDetailsShotColor
         resourceValue.isOpaque = true
-        resourceValue.background = ColorUtil.labMaxDetailsShotColor
-        panelLabMaxDetails.add(resourceValue,GridBagConstraints(2, 1, 1, 2, 0.0, 0.0,
+   //     resourceValue.background = ColorUtil.labMaxDetailsShotColor
+        panelLabMaxDetails.add(resourceValue, GridBagConstraints(2, 1, 1, 2, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.VERTICAL,
                 Insets(5, 5, 5, 5), 0, 0))
 
         lblCurrent.text = "Eтек"
         lblCurrent.font = fontSize14
-        panelLabMaxDetails.add(lblCurrent,GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
+        panelLabMaxDetails.add(lblCurrent, GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.VERTICAL,
                 Insets(5, 5, 5, 5), 0, 0))
 
         energyCurrent.font = fontSize20
         energyCurrent.text = "0"
+        energyCurrent.foreground = ColorUtil.labMaxDetailsEnergyColor
         energyCurrent.isOpaque = true
-        energyCurrent.background = ColorUtil.labMaxDetailsEnergyColor
-        panelLabMaxDetails.add(energyCurrent,GridBagConstraints(3, 1, 1, 2, 0.0, 0.0,
+    //    energyCurrent.background = ColorUtil.labMaxDetailsEnergyColor
+        panelLabMaxDetails.add(energyCurrent, GridBagConstraints(3, 1, 1, 2, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.VERTICAL,
                 Insets(5, 5, 5, 5), 0, 0))
 
@@ -265,30 +272,32 @@ class JPanelEnergy: JPanel() {
         //---- Энергия мин ----
         lblEnergyMin.text = "Eмин"
         lblEnergyMin.font = fontSize14
-        panelLabMaxDetails.add(lblEnergyMin,GridBagConstraints(4, 0, 1, 1, 0.0, 0.0,
+        panelLabMaxDetails.add(lblEnergyMin, GridBagConstraints(4, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.VERTICAL,
                 Insets(5, 5, 5, 5), 0, 0))
 
         energyMin.font = fontSize20
         energyMin.text = "0"
+        energyMin.foreground = ColorUtil.labMaxDetailsEnergyColor2
         energyMin.isOpaque = true
-        energyMin.background = ColorUtil.labMaxDetailsEnergyColor2
-        panelLabMaxDetails.add(energyMin,GridBagConstraints(4, 1, 1, 2, 0.0, 0.0,
+  //      energyMin.background = ColorUtil.labMaxDetailsEnergyColor2
+        panelLabMaxDetails.add(energyMin, GridBagConstraints(4, 1, 1, 2, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.VERTICAL,
                 Insets(5, 5, 5, 5), 0, 0))
 
         //---- Энергия макс ----
         lblEnergyMax.text = "Eмакс"
         lblEnergyMax.font = fontSize14
-        panelLabMaxDetails.add(lblEnergyMax,GridBagConstraints(5, 0, 1, 1, 0.0, 0.0,
+        panelLabMaxDetails.add(lblEnergyMax, GridBagConstraints(5, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.VERTICAL,
                 Insets(5, 5, 5, 5), 0, 0))
 
         energyMax.font = fontSize20
         energyMax.text = "0"
+        energyMax.foreground = ColorUtil.labMaxDetailsEnergyColor2
         energyMax.isOpaque = true
-        energyMax.background = ColorUtil.labMaxDetailsEnergyColor2
-        panelLabMaxDetails.add(energyMax,GridBagConstraints(5, 1, 1, 2, 0.0, 0.0,
+   //     energyMax.background = ColorUtil.labMaxDetailsEnergyColor2
+        panelLabMaxDetails.add(energyMax, GridBagConstraints(5, 1, 1, 2, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.VERTICAL,
                 Insets(5, 5, 5, 5), 0, 0))
 
@@ -296,15 +305,16 @@ class JPanelEnergy: JPanel() {
         //---- Энергия средняя ----
         lblEnergyMean.text = "Eср"
         lblEnergyMean.font = fontSize14
-        panelLabMaxDetails.add(lblEnergyMean,GridBagConstraints(6, 0, 1, 1, 0.0, 0.0,
+        panelLabMaxDetails.add(lblEnergyMean, GridBagConstraints(6, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.VERTICAL,
                 Insets(5, 5, 5, 5), 0, 0))
 
         energyMean.font = fontSize20
         energyMean.text = "0"
+        energyMean.foreground = ColorUtil.labMaxDetailsEnergyColor2
         energyMean.isOpaque = true
-        energyMean.background = ColorUtil.labMaxDetailsEnergyColor2
-        panelLabMaxDetails.add(energyMean,GridBagConstraints(6, 1, 1, 2, 0.0, 0.0,
+     //   energyMean.background = ColorUtil.labMaxDetailsEnergyColor2
+        panelLabMaxDetails.add(energyMean, GridBagConstraints(6, 1, 1, 2, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.VERTICAL,
                 Insets(5, 5, 5, 5), 0, 0))
 
@@ -320,54 +330,49 @@ class JPanelEnergy: JPanel() {
         /*
             PANEL SOUTH
          *************************************************************************************************************/
-        panelSouth.layout = VerticalLayout()
-        panelSouth.border = BorderFactory.createEmptyBorder(0, 5, 0, 5)
+        panelSouth.apply {
+            layout = VerticalLayout()
+            //      background = Color.LIGHT_GRAY
+            border = BorderFactory.createEmptyBorder(0, 5, 0, 5)
+        }
 
         val panelCommonChartSet = JPanel()
         panelCommonChartSet.layout = GridBagLayout()
         panelCommonChartSet.alignmentX = Component.LEFT_ALIGNMENT
 
-        (panelCommonChartSet.layout as GridBagLayout).columnWidths = intArrayOf(5,50, 50, 50, 50, 50, 50, 70,5)
+        (panelCommonChartSet.layout as GridBagLayout).columnWidths = intArrayOf(5, 50, 50, 50, 50, 50, 50, 70, 5)
 
-        lblCommonChart.font = fontSize14
-        panelCommonChartSet.add(lblCommonChart,GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
+      //  lblCommonChart.font = fontSize14
+        panelCommonChartSet.add(lblCommonChart, GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
                 GridBagConstraints.WEST, GridBagConstraints.VERTICAL,
                 Insets(5, 5, 5, 5), 0, 0))
 
-        panelCommonChartSet.add(lblRangeDomainCommon,GridBagConstraints(2, 1, 1, 1, 0.0, 0.0,
+        panelCommonChartSet.add(lblRangeDomainCommon, GridBagConstraints(2, 1, 1, 1, 0.0, 0.0,
                 GridBagConstraints.WEST, GridBagConstraints.VERTICAL,
                 Insets(5, 5, 5, 5), 0, 0))
 
-        panelCommonChartSet.add(lblRangeAxesCommon,GridBagConstraints(4, 1, 1, 1, 0.0, 0.0,
+        panelCommonChartSet.add(lblRangeAxesCommon, GridBagConstraints(4, 1, 1, 1, 0.0, 0.0,
                 GridBagConstraints.WEST, GridBagConstraints.VERTICAL,
                 Insets(5, 5, 5, 5), 0, 0))
 
-        panelCommonChartSet.add(rangeXCommonChoose,GridBagConstraints(3, 1, 1, 1, 0.0, 0.0,
+        panelCommonChartSet.add(rangeXCommonChoose, GridBagConstraints(3, 1, 1, 1, 0.0, 0.0,
                 GridBagConstraints.WEST, GridBagConstraints.VERTICAL,
                 Insets(5, 5, 5, 5), 0, 0))
 
         minYCommonChart.preferredSize = Dimension(50, 20)
-        panelCommonChartSet.add(minYCommonChart,GridBagConstraints(5, 1, 1, 1, 0.0, 0.0,
+        panelCommonChartSet.add(minYCommonChart, GridBagConstraints(5, 1, 1, 1, 0.0, 0.0,
                 GridBagConstraints.WEST, GridBagConstraints.VERTICAL,
                 Insets(5, 5, 5, 5), 0, 0))
 
         maxYCommonChart.preferredSize = Dimension(50, 20)
-        panelCommonChartSet.add(maxYCommonChart,GridBagConstraints(6, 1, 1, 1, 0.0, 0.0,
+        panelCommonChartSet.add(maxYCommonChart, GridBagConstraints(6, 1, 1, 1, 0.0, 0.0,
                 GridBagConstraints.WEST, GridBagConstraints.VERTICAL,
                 Insets(5, 5, 5, 5), 0, 0))
 
-        rangeAxesCommonUpdateBtn.preferredSize = Dimension(70, 20)
-        panelCommonChartSet.add(rangeAxesCommonUpdateBtn,GridBagConstraints(7, 1, 1, 1, 0.0, 0.0,
+        rangeAxesCommonUpdateBtn.preferredSize = Dimension(90, 20)
+        panelCommonChartSet.add(rangeAxesCommonUpdateBtn, GridBagConstraints(7, 1, 1, 1, 0.0, 0.0,
                 GridBagConstraints.WEST, GridBagConstraints.VERTICAL,
                 Insets(5, 5, 5, 5), 0, 0))
-
-
-        lblResource.font = fontSize14
-
-        resourceValue.font = fontSize20
-        resourceValue.isOpaque = true
-        resourceValue.background = ColorUtil.commonDetailsShotColor
-
 
         val datasetCommon: XYDataset = createDatasetCommon()
 
@@ -378,7 +383,7 @@ class JPanelEnergy: JPanel() {
         jChartPanelCommon.preferredSize = Dimension(chartCommonWidth, chartCommonHeight)
         jChartPanelCommon.minimumSize = Dimension(chartCommonWidth, chartCommonHeight)
         jChartPanelCommon.border = BorderFactory.createEmptyBorder(1, 1, 1, 1)
-        jChartPanelCommon.background = Color.GRAY
+        //    jChartPanelCommon.background = Color.GRAY
         jChartPanelCommon.size = Dimension(chartCommonWidth, chartCommonHeight)
 
         panelSouth.add(panelCommonChartSet)
@@ -417,7 +422,7 @@ class JPanelEnergy: JPanel() {
     fun addListeners(controller: EnergyCommonLogController) {
         commonFileChooseButton.addActionListener(EnergyCommonLogFileChooseListener(this, controller))
         rangeXCommonChoose.addActionListener(RangeCommonChooseListener(this, controller))
-        rangeAxesCommonUpdateBtn.addActionListener{
+        rangeAxesCommonUpdateBtn.addActionListener {
             controller.setAxisRange()
         }
     }
@@ -427,7 +432,7 @@ class JPanelEnergy: JPanel() {
         energyFileChooseButton.addActionListener(EnergyLabMaxFileChooseListener(this, controller))
         logSizeTrackEn.actionCommand = "log file track"
         logSizeTrackEn.addActionListener(LabMaxLogSizeTracker(this, controller))
-        rangeXLabMaxChoose.addActionListener(RangeLabMaxChooseListener(this,controller))
+        rangeXLabMaxChoose.addActionListener(RangeLabMaxChooseListener(this, controller))
 
     }
 
@@ -439,7 +444,7 @@ class JPanelEnergy: JPanel() {
         chartPanelToPng("picall.png", jChartPanelCommon)
     }
 
-    fun createAlert(title: String,message: String, type: Int) {
+    fun createAlert(title: String, message: String, type: Int) {
         JOptionPane.showMessageDialog(this,
                 message,
                 title,
@@ -458,16 +463,16 @@ class JPanelEnergy: JPanel() {
                 false,
                 false
         )
-
-
+        chart.backgroundPaint = ColorUtil.chartsBackgroundColor
         plotLabMax = chart.xyPlot
+
 
         val renderer = XYLineAndShapeRenderer(true, false)
         renderer.setSeriesPaint(0, ColorUtil.labMaxChartColor)
         renderer.setSeriesStroke(0, BasicStroke(1.0f))
 
         plotLabMax.renderer = renderer
-        plotLabMax.backgroundPaint = ColorUtil.chartsBackgroundColor
+        plotLabMax.backgroundPaint = ColorUtil.chartsPlotBackgroundColor
 
         plotLabMax.isRangeGridlinesVisible = true
         plotLabMax.rangeGridlinePaint = Color.gray
@@ -478,11 +483,15 @@ class JPanelEnergy: JPanel() {
         val axis = plotLabMax.domainAxis
         val axis2 = plotLabMax.rangeAxis
 
-        val font = Font("Arial", Font.BOLD, 14)
-        axis.tickLabelFont = font
-        axis.labelFont = font
-        axis2.tickLabelFont = font
-        axis2.labelFont = font
+        axis.tickLabelPaint = Color.LIGHT_GRAY
+        axis2.tickLabelPaint = Color.LIGHT_GRAY
+        axis.labelPaint = Color.LIGHT_GRAY
+        axis2.labelPaint = Color.LIGHT_GRAY
+//        val font = Font("Arial", Font.BOLD, 14)
+//        axis.tickLabelFont = font
+//        axis.labelFont = font
+//        axis2.tickLabelFont = font
+//        axis2.labelFont = font
         return chart
 
     }
@@ -508,22 +517,22 @@ class JPanelEnergy: JPanel() {
                 false,
                 false
         )
-
+        chart.backgroundPaint = ColorUtil.chartsBackgroundColor
         plotCommon = chart.xyPlot
 
         val renderer = XYLineAndShapeRenderer(true, false)
 
-        renderer.setSeriesStroke(0, BasicStroke(3.0f))
+        renderer.setSeriesStroke(0, BasicStroke(2.0f))
         renderer.setSeriesPaint(0, ColorUtil.commonChartMeanColor)
 
-        renderer.setSeriesStroke(1, BasicStroke(3.0f))
+        renderer.setSeriesStroke(1, BasicStroke(2.0f))
         renderer.setSeriesPaint(1, ColorUtil.commonChartStopColor)
 
-        renderer.setSeriesStroke(2, BasicStroke(3.0f))
+        renderer.setSeriesStroke(2, BasicStroke(2.0f))
         renderer.setSeriesPaint(2, ColorUtil.commonChartStartColor)
 
         plotCommon.renderer = renderer
-        plotCommon.backgroundPaint = ColorUtil.chartsBackgroundColor
+        plotCommon.backgroundPaint = ColorUtil.chartsPlotBackgroundColor
 
         plotCommon.isRangeGridlinesVisible = true
         plotCommon.rangeGridlinePaint = Color.gray
@@ -534,11 +543,15 @@ class JPanelEnergy: JPanel() {
         val axis = plotCommon.domainAxis
         val axis2 = plotCommon.rangeAxis
 
-        val font = Font("Arial", Font.BOLD, 14)
-        axis.tickLabelFont = font
-        axis.labelFont = font
-        axis2.tickLabelFont = font
-        axis2.labelFont = font
+        axis.tickLabelPaint = Color.LIGHT_GRAY
+        axis2.tickLabelPaint = Color.LIGHT_GRAY
+        axis.labelPaint = Color.LIGHT_GRAY
+        axis2.labelPaint = Color.LIGHT_GRAY
+//        val font = Font("Arial", Font.BOLD, 14)
+//        axis.tickLabelFont = font
+//        axis.labelFont = font
+//        axis2.tickLabelFont = font
+//        axis2.labelFont = font
         return chart
 
     }

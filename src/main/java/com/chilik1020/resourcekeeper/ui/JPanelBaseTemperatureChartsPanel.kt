@@ -15,7 +15,6 @@ import org.jfree.data.time.TimeSeriesCollection
 import org.jfree.data.xy.XYDataset
 import java.awt.*
 import javax.swing.*
-import javax.swing.border.MatteBorder
 
 abstract class JPanelBaseTemperatureChartsPanel: JPanel() {
 
@@ -38,7 +37,7 @@ abstract class JPanelBaseTemperatureChartsPanel: JPanel() {
     val tempChanelNames = mutableListOf<String>()
 
     val chartWidth = 510
-    var chartHeight = 100
+    var chartHeight = 115
 
 
     open fun initComponents() {
@@ -52,8 +51,8 @@ abstract class JPanelBaseTemperatureChartsPanel: JPanel() {
     open fun createMainPanel() {
         val mainPanel = JPanel()
         mainPanel.layout = GridBagLayout()
-
-        border = MatteBorder(3, 1, 1, 1, Color.GRAY)
+   //     mainPanel.background = Color.LIGHT_GRAY
+   //     border = MatteBorder(3, 1, 1, 1, Color.GRAY)
 
         (mainPanel.layout as GridBagLayout).columnWidths = intArrayOf(5, 110, 50,50, 100, 100,80,5)
 
@@ -105,7 +104,7 @@ abstract class JPanelBaseTemperatureChartsPanel: JPanel() {
             jChartPanel.preferredSize = Dimension(chartWidth, chartHeight)
             jChartPanel.minimumSize = Dimension(chartWidth, chartHeight)
             jChartPanel.border = BorderFactory.createEmptyBorder(1, 1, 1, 1)
-            jChartPanel.background = Color.GRAY
+          //  jChartPanel.background = Color.GRAY
             listChartPanels.add(jChartPanel)
         }
         cycleCreateAndInitializeChartItems()
@@ -114,25 +113,36 @@ abstract class JPanelBaseTemperatureChartsPanel: JPanel() {
     open fun createChartItemPanel(i: Int) {
         val container = JPanel()
         container.layout = FlowLayout()
+     //   container.background = Color.LIGHT_GRAY
 
         val leftPanel = JPanel()
-        leftPanel.layout = BoxLayout(leftPanel, BoxLayout.Y_AXIS)
-        leftPanel.alignmentX = Component.LEFT_ALIGNMENT
+        leftPanel.apply {
+            layout = BoxLayout(leftPanel, BoxLayout.Y_AXIS)
+            alignmentX = Component.LEFT_ALIGNMENT
+         //   background = Color.LIGHT_GRAY
+        }
+
         leftPanel.add(JLabel(tempChanelNames[i]))
         leftPanel.add(listChartPanels[i])
 
         val rightPanel = JPanel()
-        rightPanel.layout = BoxLayout(rightPanel, BoxLayout.X_AXIS)
-        rightPanel.alignmentX = Component.CENTER_ALIGNMENT
+        rightPanel.apply {
+            layout = BoxLayout(rightPanel, BoxLayout.X_AXIS)
+            alignmentX = Component.CENTER_ALIGNMENT
+         //   background = Color.LIGHT_GRAY
+        }
 
         tempChCurrentsOnChart[i].isOpaque = true
-        tempChCurrentsOnChart[i].background = ColorUtil.temperatureChartsColor[i]
+   //     tempChCurrentsOnChart[i].background = ColorUtil.temperatureChartsColor[i]
         tempChCurrentsOnChart[i].font = fontSize16
         tempChCurrentsOnChart[i].text = "      "
+        tempChCurrentsOnChart[i].foreground = ColorUtil.temperatureChartsColor[i]
         tempChCurrentsOnChart[i].alignmentX = Component.CENTER_ALIGNMENT
+      //  tempChCurrentsOnChart[i].background = Color.LIGHT_GRAY
 
         val tracksPanel = JPanel()
         tracksPanel.layout = GridBagLayout()
+     //   tracksPanel.background = Color.LIGHT_GRAY
         (tracksPanel.layout as GridBagLayout).columnWidths = intArrayOf(40, 40)
         (tracksPanel.layout as GridBagLayout).rowHeights = intArrayOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
         (tracksPanel.layout as GridBagLayout).columnWeights = doubleArrayOf(0.0, 0.0, 0.0, 1.0E-4)
@@ -193,17 +203,19 @@ abstract class JPanelBaseTemperatureChartsPanel: JPanel() {
                 "",
                 dataset
         )
+        chart.isBorderVisible = false
+        chart.backgroundPaint = ColorUtil.chartsBackgroundColor
 
         val plot = chart.xyPlot
 
         val renderer = XYLineAndShapeRenderer(true, false)
-        renderer.setSeriesStroke(0, BasicStroke(3.0f))
+        renderer.setSeriesStroke(0, BasicStroke(2.0f))
         renderer.setSeriesPaint(0, ColorUtil.temperatureChartsColor[chanel])
 
         renderer.setSeriesVisibleInLegend(0,false)
 
         plot.renderer = renderer
-        plot.backgroundPaint = ColorUtil.chartsBackgroundColor
+        plot.backgroundPaint = ColorUtil.chartsPlotBackgroundColor
         plot.isRangeGridlinesVisible = true
         plot.rangeGridlinePaint = Color.gray
 
@@ -215,12 +227,13 @@ abstract class JPanelBaseTemperatureChartsPanel: JPanel() {
 
         val axis = plot.domainAxis
         val axis2 = plot.rangeAxis
-
-        val font = Font("Arial", Font.BOLD, 16)
-        axis.tickLabelFont = font
-        axis.labelFont = font
-        axis2.tickLabelFont = font
-        axis2.labelFont = font
+        axis.tickLabelPaint = Color.LIGHT_GRAY
+        axis2.tickLabelPaint = Color.LIGHT_GRAY
+//        val font = Font("Arial", Font.BOLD, 16)
+//        axis.tickLabelFont = font
+//        axis.labelFont = font
+//        axis2.tickLabelFont = font
+//        axis2.labelFont = font
         return chart
 
     }

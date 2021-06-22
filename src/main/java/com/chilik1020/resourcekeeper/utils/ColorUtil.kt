@@ -7,7 +7,11 @@ class ColorUtil {
         val btnGreenColor: Color = Color(95,167,127)
         val btnRedColor: Color = Color(216,88,124)
 
-        val chartsBackgroundColor: Color = Color(243,243,243)
+        val panelBorderColor: Color = Color.gray
+
+        val chartsPlotBackgroundColor: Color = Color(60,63,65)
+        val chartsBackgroundColor: Color = Color(60,63,65)
+//        val chartsBackgroundColor: Color = Color(243,243,243)
         val labMaxChartColor: Color = Color(86,180,99)
         val labMaxDetailsEnergyColor = Color(0,255,255)
         val labMaxDetailsEnergyColor2 = Color(180,255,255)

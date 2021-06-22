@@ -1,5 +1,6 @@
 package com.chilik1020.resourcekeeper.ui
 
+import com.chilik1020.resourcekeeper.utils.ColorUtil
 import com.chilik1020.resourcekeeper.utils.JsonConfig
 import org.jfree.ui.tabbedui.VerticalLayout
 import java.awt.*
@@ -28,16 +29,20 @@ class JPanelTemperature: JPanel() {
     private fun initComponents() {
 
         layout = VerticalLayout()
-
+        //background = Color.LIGHT_GRAY
         val panelNorth = JPanel()
 
         /*
          * Panel temperature data
          **************************************************************************************************************/
 
-        panelNorth.layout = GridBagLayout()
+        panelNorth.apply {
+            layout = GridBagLayout()
+        //    background = Color.LIGHT_GRAY
+        }
 
-        border = MatteBorder(3, 1, 1, 1, Color.GRAY)
+      //  border = MatteBorder(3, 1, 1, 1, Color.GRAY)
+        border = BorderFactory.createMatteBorder(1,1,1,1, ColorUtil.panelBorderColor)
 
         (panelNorth.layout as GridBagLayout).columnWidths = intArrayOf(5, 110, 50,50, 100, 100,80,5)
 
@@ -45,7 +50,7 @@ class JPanelTemperature: JPanel() {
         (panelNorth.layout as GridBagLayout).columnWeights = doubleArrayOf(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0E-4)
         (panelNorth.layout as GridBagLayout).rowWeights = doubleArrayOf(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0E-4)
 
-        labelName.font = fontSize16
+     //   labelName.font = fontSize16
         labelName.preferredSize = Dimension(110,20)
         panelNorth.add(labelName,GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
                 GridBagConstraints.WEST, GridBagConstraints.VERTICAL,
@@ -66,6 +71,9 @@ class JPanelTemperature: JPanel() {
 
         val tabbedChartsPanel = JTabbedPane()
 
+        tabbedChartsPanel.apply {
+        //    background = Color.LIGHT_GRAY
+        }
 
         tabbedChartsPanel.add("Овен УКТ38", panelOwenCharts)
         tabbedChartsPanel.add("Датчики LTU", panelLtuInnerCharts)

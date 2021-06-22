@@ -8,9 +8,12 @@ import com.chilik1020.resourcekeeper.controller.temperature.LtuInnerTemperatureC
 import com.chilik1020.resourcekeeper.controller.temperature.OwenTemperatureController
 import com.chilik1020.resourcekeeper.utils.chartPanelToPng
 import java.awt.BorderLayout
-import javax.swing.*
+import java.awt.Color
+import javax.swing.BorderFactory
+import javax.swing.JFrame
+import javax.swing.JPanel
 
-class MainView: JFrame() {
+class MainView : JFrame() {
 
     private val owenTemperatureController = OwenTemperatureController()
     private val ltuTemperatureController = LtuInnerTemperatureController()
@@ -42,23 +45,34 @@ class MainView: JFrame() {
     private fun initComponents() {
         val container = contentPane
 
-        container.layout = BorderLayout()
+//        container.layout = BorderLayout()
 
         mainPanel = JPanel()
-        mainPanel.border = BorderFactory.createEmptyBorder(5, 5, 5, 5)
+        mainPanel.apply {
+            border = BorderFactory.createEmptyBorder(10, 10, 10, 10)
+        //    background = Color.DARK_GRAY
+            layout = BorderLayout(5, 0)
+        }
 
         val leftPanel = JPanel()
-        leftPanel.layout = BorderLayout()
+        leftPanel.apply {
+       //     background = Color.DARK_GRAY
+            layout = BorderLayout(0, 0)
+        }
+
         leftPanel.add(jPanelTelegram, BorderLayout.NORTH)
         leftPanel.add(jPanelTemperature, BorderLayout.SOUTH)
 
         val rightPanel = JPanel()
-        rightPanel.layout = BorderLayout()
+        rightPanel.apply {
+         //   background = Color.DARK_GRAY
+            layout = BorderLayout(0, 5)
+        }
         rightPanel.add(jPanelGeneral, BorderLayout.NORTH)
         rightPanel.add(jPanelEnergy, BorderLayout.SOUTH)
 
         mainPanel.add(leftPanel, BorderLayout.WEST)
-        mainPanel.add(rightPanel , BorderLayout.EAST)
+        mainPanel.add(rightPanel, BorderLayout.EAST)
 
         container.add(mainPanel)
 

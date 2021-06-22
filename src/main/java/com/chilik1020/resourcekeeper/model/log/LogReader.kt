@@ -5,7 +5,7 @@ import com.chilik1020.resourcekeeper.utils.JsonConfig
 import java.io.File
 import java.io.RandomAccessFile
 
-abstract class LogReader<T>(val buffer: DataBuffer<T>){
+abstract class LogReader<T>(val buffer: DataBuffer<T>) {
 
     private lateinit var file: File
     lateinit var logPath: String
@@ -21,7 +21,7 @@ abstract class LogReader<T>(val buffer: DataBuffer<T>){
 
         file = File(logPath)
 
-        val raf = RandomAccessFile(file,"r")
+        val raf = RandomAccessFile(file, "r")
         val lines = file.readLines()
         val currentPosition = raf.length()
 
@@ -34,9 +34,9 @@ abstract class LogReader<T>(val buffer: DataBuffer<T>){
 
         while (readEn) {
 
-            val line = raf.readLine()
-            when (line) {
-                lastReadLine -> {}
+            when (val line = raf.readLine()) {
+                lastReadLine -> {
+                }
                 null -> readFreqMs = FREQ2
                 else -> {
                     lastReadLine = line

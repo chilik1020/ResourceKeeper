@@ -1,5 +1,6 @@
 package com.chilik1020.resourcekeeper.base
 
+import com.chilik1020.resourcekeeper.MainApp
 import com.chilik1020.resourcekeeper.controller.energy.EnergyCommonLogController
 import com.chilik1020.resourcekeeper.controller.energy.EnergyLabMaxController
 import com.chilik1020.resourcekeeper.controller.general.GeneralController

@@ -1,5 +1,6 @@
 package com.chilik1020.resourcekeeper.controller.general
 
+import com.chilik1020.resourcekeeper.MainApp
 import com.chilik1020.resourcekeeper.base.BaseController
 import com.chilik1020.resourcekeeper.ui.JPanelGeneral
 import kotlinx.coroutines.GlobalScope
@@ -8,9 +9,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.swing.JOptionPane
 
-
-
-class GeneralController: BaseController() {
+class GeneralController : BaseController() {
     @Inject
     lateinit var view: JPanelGeneral
 

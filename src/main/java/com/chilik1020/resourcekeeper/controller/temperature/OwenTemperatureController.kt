@@ -8,6 +8,7 @@ import kotlinx.coroutines.launch
 import com.chilik1020.resourcekeeper.model.log.CommonLogWriter
 import com.chilik1020.resourcekeeper.model.data.TemperaturePoint
 import com.chilik1020.resourcekeeper.model.log.TemperatureLogWriter
+import com.chilik1020.resourcekeeper.model.temperature.FakeTemperatureDevice
 import com.chilik1020.resourcekeeper.model.temperature.RS232TemperatureDevice
 
 import com.chilik1020.resourcekeeper.ui.JPanelTemperature
@@ -20,7 +21,7 @@ class OwenTemperatureController : BaseTemperatureController() {
 
     @Inject lateinit var viewTemperatureMain: JPanelTemperature
     @field:[Inject Named("owen")] lateinit var buffer: DataBuffer<TemperaturePoint>
-    @Inject lateinit var sourceDevice: RS232TemperatureDevice
+    @Inject lateinit var sourceDevice: FakeTemperatureDevice
     @Inject lateinit var commonLogWriter: CommonLogWriter
     @Inject lateinit var temperatureLogWriter: TemperatureLogWriter
 

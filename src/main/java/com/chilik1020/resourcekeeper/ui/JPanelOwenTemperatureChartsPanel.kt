@@ -4,6 +4,7 @@ import com.chilik1020.resourcekeeper.utils.JsonConfig
 import org.jfree.chart.plot.XYPlot
 import org.jfree.data.time.TimeSeries
 import org.jfree.ui.tabbedui.VerticalLayout
+import java.awt.Color
 import javax.swing.*
 
 class JPanelOwenTemperatureChartsPanel : JPanelBaseTemperatureChartsPanel() {
@@ -18,6 +19,7 @@ class JPanelOwenTemperatureChartsPanel : JPanelBaseTemperatureChartsPanel() {
 
     override fun initFields() {
         layout = VerticalLayout()
+//        background = Color.LIGHT_GRAY
 
         for (i in 0 until JsonConfig.tempChanelsOwen.size) {
             tempChCurrentsOnChart.add(JLabel())

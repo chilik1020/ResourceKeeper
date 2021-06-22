@@ -124,14 +124,18 @@
             <version>1.0.23</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/com.jtattoo/JTattoo -->
+        <!-- UI -->
         <dependency>
             <groupId>com.jtattoo</groupId>
             <artifactId>JTattoo</artifactId>
             <version>1.6.13</version>
         </dependency>
 
-
+        <dependency>
+            <groupId>com.formdev</groupId>
+            <artifactId>flatlaf</artifactId>
+            <version>1.0</version>
+        </dependency>
 
     </dependencies>
 
@@ -254,7 +258,7 @@
                         <configuration>
                             <archive>
                                 <manifest>
-                                    <mainClass>MainApp</mainClass>
+                                    <mainClass>com.chilik1020.resourcekeeper.MainApp</mainClass>
                                 </manifest>
                             </archive>
                             <descriptorRefs>

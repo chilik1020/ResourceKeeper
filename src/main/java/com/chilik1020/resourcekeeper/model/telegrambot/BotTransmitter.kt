@@ -1,5 +1,6 @@
 package com.chilik1020.resourcekeeper.model.telegrambot
 
+import com.chilik1020.resourcekeeper.MainApp
 import com.chilik1020.resourcekeeper.base.Consumer
 import com.chilik1020.resourcekeeper.model.DataBuffer
 import com.chilik1020.resourcekeeper.model.data.BotEventMessage
